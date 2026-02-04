@@ -1,0 +1,80 @@
+.seats-page {
+  padding: 30px;
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+.price-label {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.row-label {
+  width: 25px;
+  font-weight: bold;
+}
+
+.seat-block {
+  display: flex;
+}
+
+.aisle {
+  width: 30px;
+}
+
+.seat {
+  width: 28px;
+  height: 28px;
+  margin: 3px;
+  border: 1px solid #4caf50;
+  background: #fff;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.seat.selected {
+  background: #4caf50;
+  color: white;
+}
+
+.screen {
+  margin: 40px auto 10px;
+  width: 60%;
+  padding: 8px;
+  background: linear-gradient(#e3f2fd, #bbdefb);
+  text-align: center;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+.summary {
+  border-top: 1px solid #ddd;
+  padding-top: 15px;
+}
+
+.proceed {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: #e31c25;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.seat.sold {
+  background: #ccc;
+  border-color: #999;
+  color: #666;
+  cursor: not-allowed;
+}
