@@ -1,22 +1,58 @@
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+
 const Navbar = () => {
+  const navigate = useNavigate();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    !!localStorage.getItem("token")
+  );
+
+  const userName = localStorage.getItem("userName");
+
+  const handleLogout = () => {
+    localStorage.clear();
+    setIsLoggedIn(false);
+    navigate("/");
+  };
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setIsLoggedIn(!!localStorage.getItem("token"));
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
   return (
     <nav style={styles.nav}>
       <div style={styles.left}>
         <h2 style={styles.logo}>BookMyShow</h2>
-        <input
-          type="text"
-          placeholder="Search for Movies, Events, Plays..."
-          style={styles.search}
-        />
       </div>
 
       <div style={styles.right}>
-        <span style={styles.city}>Hyderabad</span>
-        <button style={styles.signIn}>Sign In</button>
+        {isLoggedIn ? (
+          <>
+            <span>Hi, {userName}</span>
+            <Link to="/my-bookings">My Bookings</Link>
+            <button style={styles.logout} onClick={handleLogout}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <button
+            style={styles.signIn}
+            onClick={() => navigate("/login")}
+          >
+            Sign In
+          </button>
+        )}
       </div>
     </nav>
   );
 };
+
 
 const styles = {
   nav: {
@@ -57,7 +93,16 @@ const styles = {
     padding: "8px 14px",
     borderRadius: "4px",
     cursor: "pointer"
-  }
+  },
+  logout: {
+  backgroundColor: "#333",
+  color: "#fff",
+  border: "none",
+  padding: "8px 14px",
+  borderRadius: "4px",
+  cursor: "pointer"
+}
+
 };
 
 export default Navbar;

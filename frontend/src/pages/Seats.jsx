@@ -5,9 +5,12 @@ import "./Seats.css";
 
 import { createBooking } from "../services/backend";
 
+
 const Seats = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
+
+  const userId = localStorage.getItem("userId");
 
    // ✅ Hooks MUST be at top level
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -17,20 +20,20 @@ const Seats = () => {
 
   // ✅ Guard values (not hooks)
   const imdbID = state?.imdbID;
-  const theatre = state?.theatre;
-  const time = state?.time;
+  const theatre = state?.theatre || state?.theatreName;
+  const showTime = state?.time;
   const movieTitle = state?.movieTitle;
   
   // ✅ Fetch already booked seats
   useEffect(() => {
     fetch(
       `${import.meta.env.VITE_BACKEND_URL}/api/bookings/seats/booked` +
-        `?imdbID=${imdbID}&theatre=${theatre}&showTime=${time}`
+        `?imdbID=${imdbID}&theatre=${theatre}&showTime=${showTime}`
     )
       .then((res) => res.json())
       .then(setBookedSeats)
       .catch(console.error);
-  }, [imdbID, theatre, time]);
+  }, [imdbID, theatre, showTime]);
 
   // Safety check
   if (!state) {
@@ -50,7 +53,7 @@ const Seats = () => {
   return (
     <div className="seats-page">
       <h2>{theatre}</h2>
-      <p>{time}</p>
+      <p>{showTime}</p>
 
       {seatLayout.map((section) => (
         <div key={section.category} className="section">
@@ -130,31 +133,42 @@ const Seats = () => {
         <p>Total: ₹{total}</p>
 
        <button
-        disabled={!selectedSeats.length || isBooking}
-        className="proceed"
-        onClick={async () => {
-          setIsBooking(true);
-
-          try {
-            const booking = await createBooking({
+          disabled={!selectedSeats.length || isBooking}
+          className="proceed"
+          onClick={async () => {
+            setIsBooking(true);
+            console.log({
+              userId,
               imdbID,
               movieTitle,
               theatre,
-              showTime: time,
-              seats: selectedSeats.map((s) => s.seat),
-              totalAmount: total,
+              showTime,
+              seats: selectedSeats.map(s => s.seat),
+              total,
             });
 
-            navigate(`/booking/${booking._id}`);
-          } catch (err) {
-            alert(err.message);              // 🔔 Show error
-            setSelectedSeats([]);            // 🔥 CLEAR SELECTED SEATS HERE
-            setIsBooking(false);             // Re-enable button
-          }
-        }}
-      >
-        {isBooking ? "Booking..." : "Proceed"}
-      </button>
+            try {
+              const booking = await createBooking({
+                                    
+                imdbID,
+                movieTitle,
+                theatre,
+                showTime: showTime,
+                seats: selectedSeats.map((s) => s.seat),
+                totalAmount: total,
+              });
+
+              navigate(`/booking/${booking._id}`);
+            } catch (err) {
+              alert(err.message);
+              setSelectedSeats([]);
+              setIsBooking(false);
+            }
+          }}
+        >
+          {isBooking ? "Booking..." : "Proceed"}
+        </button>
+
 
       </div>
     </div>

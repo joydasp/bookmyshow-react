@@ -4,6 +4,10 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js"; // ✅ ADD THIS LINE
 import showRoutes from  "./routes/showRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+
+
 
 
 dotenv.config();
@@ -16,6 +20,8 @@ app.use(express.json());
 
 // ✅ Call DB connection
 connectDB();
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/shows", showRoutes);

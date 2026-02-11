@@ -17,21 +17,23 @@ export const checkBackendHealth = async () => {
 };
 
 
-export const createBooking = async (bookingData) => {
-  const res = await fetch(
-    `${import.meta.env.VITE_BACKEND_URL}/api/bookings`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(bookingData),
-    }
-  );
+export const createBooking = async (data) => {
+  const token = localStorage.getItem("token");
 
-  const data = await res.json();
+  const res = await fetch(`${BASE_URL}/api/bookings`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
 
-  if (!res.ok) {
-    throw new Error(data.error || "Booking failed");
-  }
+  const result = await res.json();
 
-  return data;
+  if (!res.ok) throw new Error(result.message);
+
+  return result;
 };
+
+

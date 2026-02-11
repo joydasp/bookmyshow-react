@@ -2,7 +2,12 @@ import { Link } from "react-router-dom";
 
 const MovieCard = ({ movie }) => {
   return (
-    <Link to={`/movie/${movie.imdbID}`} style={{ textDecoration: "none" }}>
+    <Link
+      to={`/movie/${movie.imdbID}`}
+      state={{ movieTitle: movie.Title }}
+      style={{ textDecoration: "none" }}
+    >
+
       <div style={styles.card}>
         <img
           src={movie.Poster !== "N/A" ? movie.Poster : "https://placehold.co/180x270"}

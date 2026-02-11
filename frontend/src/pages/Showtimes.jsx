@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getShowtimesByMovie } from "../services/backend";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 
 const Showtimes = () => {
@@ -9,6 +10,8 @@ const Showtimes = () => {
   const [theatres, setTheatres] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
+  const movieTitle = location.state?.movieTitle;
 
   useEffect(() => {
     getShowtimesByMovie(imdbID)
@@ -39,13 +42,15 @@ const Showtimes = () => {
                 key={show.time}
                 style={styles.timeBtn}
                 onClick={() =>
-                  navigate(`/movie/${imdbID}/seats`, {
-                    state: {
-                      theatre: theatre.theatreName,
-                      time: show.time,
-                      price: show.price,
-                    },
-                  })
+                 navigate(`/movie/${imdbID}/seats`, {
+                  state: {
+                    imdbID,
+                    movieTitle,   // ✅ REAL title now
+                    theatre: theatre.theatreName,
+                    time: show.time,
+                    price: show.price,
+                  },
+                })
                 }
               >
                 {show.time} — ₹{show.price}
