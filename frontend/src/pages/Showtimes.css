@@ -1,0 +1,49 @@
+.showtimes-page {
+  padding: 0.8rem;
+}
+
+.showtimes-page h1 {
+  margin: 0;
+  color: #f8fafc;
+}
+
+.showtimes-card {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.26);
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.56);
+}
+
+.showtimes-card h3 {
+  margin: 0;
+}
+
+.showtimes-location {
+  margin: 0.3rem 0 0;
+  color: #94a3b8;
+}
+
+.showtimes-row {
+  display: flex;
+  gap: 0.7rem;
+  margin-top: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.showtime-btn {
+  border: 1px solid #34d399;
+  background: rgba(52, 211, 153, 0.08);
+  color: #6ee7b7;
+  border-radius: 9px;
+  padding: 0.52rem 0.82rem;
+  cursor: pointer;
+}
+
+.showtime-btn:hover {
+  background: rgba(52, 211, 153, 0.18);
+}
+
+.showtimes-loading {
+  padding: 1rem;
+}

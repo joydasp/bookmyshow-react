@@ -13,6 +13,18 @@ const bookingSchema = new mongoose.Schema(
     showTime: String,
     seats: [String],
     totalAmount: Number,
+    snackTotal: {
+      type: Number,
+      default: 0,
+    },
+    snacks: [
+      {
+        id: Number,
+        name: String,
+        price: Number,
+        image: String,
+      },
+    ],
   },
   { timestamps: true }
 );

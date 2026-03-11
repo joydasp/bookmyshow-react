@@ -3,28 +3,21 @@ import { useLocation, useNavigate } from "react-router-dom";
 import seatLayout from "../data/seatLayout";
 import "./Seats.css";
 
-import { createBooking } from "../services/backend";
-
-
 const Seats = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
   const userId = localStorage.getItem("userId");
 
-   // ✅ Hooks MUST be at top level
   const [selectedSeats, setSelectedSeats] = useState([]);
-  const [bookedSeats, setBookedSeats] = useState([]);  
-
+  const [bookedSeats, setBookedSeats] = useState([]);
   const [isBooking, setIsBooking] = useState(false);
 
-  // ✅ Guard values (not hooks)
   const imdbID = state?.imdbID;
   const theatre = state?.theatre || state?.theatreName;
   const showTime = state?.time;
   const movieTitle = state?.movieTitle;
-  
-  // ✅ Fetch already booked seats
+
   useEffect(() => {
     fetch(
       `${import.meta.env.VITE_BACKEND_URL}/api/bookings/seats/booked` +
@@ -35,7 +28,6 @@ const Seats = () => {
       .catch(console.error);
   }, [imdbID, theatre, showTime]);
 
-  // Safety check
   if (!state) {
     return <h2>Invalid navigation. Please go back.</h2>;
   }
@@ -55,74 +47,81 @@ const Seats = () => {
       <h2>{theatre}</h2>
       <p>{showTime}</p>
 
+      <div className="seat-legend" aria-label="Seat status legend">
+        <span className="legend-item">
+          <span className="legend-dot available" />
+          Available
+        </span>
+        <span className="legend-item">
+          <span className="legend-dot selected" />
+          Selected
+        </span>
+        <span className="legend-item">
+          <span className="legend-dot sold" />
+          Sold
+        </span>
+      </div>
+
       {seatLayout.map((section) => (
         <div key={section.category} className="section">
-          <p className="price-label">
-            ₹{section.price} {section.category}
-          </p>
+          <p className="price-label">Rs. {section.price} {section.category}</p>
 
-          {section.rows.map((r) => (
-            <div key={r.row} className="row">
-              <span className="row-label">{r.row}</span>
+          <div className="rows-wrap">
+            {section.rows.map((r) => (
+              <div key={r.row} className="row">
+                <span className="row-label">{r.row}</span>
 
-              {/* LEFT BLOCK */}
-              <div className="seat-block">
-                {r.left.map((n) => {
-                  const seat = `${r.row}${n}`;
-                  const isSelected = selectedSeats.some(
-                    (s) => s.seat === seat
-                  );
-                  const isBooked = bookedSeats.includes(seat);
+                <div className="seat-block">
+                  {r.left.map((n) => {
+                    const seat = `${r.row}${n}`;
+                    const isSelected = selectedSeats.some((s) => s.seat === seat);
+                    const isBooked = bookedSeats.includes(seat);
 
-                  return (
-                    <button
-                      key={seat}
-                      disabled={isBooked}
-                      className={`seat 
-                        ${isSelected ? "selected" : ""} 
-                        ${isBooked ? "sold" : ""}`}
-                      onClick={() => toggleSeat(seat, section.price)}
-                    >
-                      {n}
-                    </button>
-                  );
-                })}
+                    return (
+                      <button
+                        key={seat}
+                        disabled={isBooked}
+                        className={`seat ${isSelected ? "selected" : ""} ${
+                          isBooked ? "sold" : ""
+                        }`}
+                        onClick={() => toggleSeat(seat, section.price)}
+                      >
+                        {n}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="aisle" />
+
+                <div className="seat-block">
+                  {r.right.map((n) => {
+                    const seat = `${r.row}${n}`;
+                    const isSelected = selectedSeats.some((s) => s.seat === seat);
+                    const isBooked = bookedSeats.includes(seat);
+
+                    return (
+                      <button
+                        key={seat}
+                        disabled={isBooked}
+                        className={`seat ${isSelected ? "selected" : ""} ${
+                          isBooked ? "sold" : ""
+                        }`}
+                        onClick={() => toggleSeat(seat, section.price)}
+                      >
+                        {n}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-
-              <div className="aisle" />
-
-              {/* RIGHT BLOCK */}
-              <div className="seat-block">
-                {r.right.map((n) => {
-                  const seat = `${r.row}${n}`;
-                  const isSelected = selectedSeats.some(
-                    (s) => s.seat === seat
-                  );
-                  const isBooked = bookedSeats.includes(seat);
-
-                  return (
-                    <button
-                      key={seat}
-                      disabled={isBooked}
-                      className={`seat 
-                        ${isSelected ? "selected" : ""} 
-                        ${isBooked ? "sold" : ""}`}
-                      onClick={() => toggleSeat(seat, section.price)}
-                    >
-                      {n}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       ))}
 
-      {/* Screen */}
       <div className="screen">All eyes this way please</div>
 
-      {/* Summary */}
       <div className="summary">
         <p>
           Seats:{" "}
@@ -130,9 +129,9 @@ const Seats = () => {
             ? selectedSeats.map((s) => s.seat).join(", ")
             : "None"}
         </p>
-        <p>Total: ₹{total}</p>
+        <p>Total: Rs. {total}</p>
 
-       <button
+        <button
           disabled={!selectedSeats.length || isBooking}
           className="proceed"
           onClick={async () => {
@@ -143,22 +142,21 @@ const Seats = () => {
               movieTitle,
               theatre,
               showTime,
-              seats: selectedSeats.map(s => s.seat),
+              seats: selectedSeats.map((s) => s.seat),
               total,
             });
 
             try {
-              const booking = await createBooking({
-                                    
-                imdbID,
-                movieTitle,
-                theatre,
-                showTime: showTime,
-                seats: selectedSeats.map((s) => s.seat),
-                totalAmount: total,
+              navigate("/payment", {
+                state: {
+                  imdbID,
+                  movieTitle,
+                  theatre,
+                  showTime,
+                  seats: selectedSeats.map((s) => s.seat),
+                  totalAmount: total,
+                },
               });
-
-              navigate(`/booking/${booking._id}`);
             } catch (err) {
               alert(err.message);
               setSelectedSeats([]);
@@ -168,8 +166,6 @@ const Seats = () => {
         >
           {isBooking ? "Booking..." : "Proceed"}
         </button>
-
-
       </div>
     </div>
   );

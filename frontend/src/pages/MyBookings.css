@@ -1,0 +1,28 @@
+.my-bookings-page {
+  padding: 0.8rem;
+}
+
+.my-bookings-page h1 {
+  margin: 0;
+}
+
+.my-bookings-page > p {
+  color: #94a3b8;
+}
+
+.my-booking-card {
+  margin-top: 0.8rem;
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.56);
+}
+
+.my-booking-card h3 {
+  margin: 0 0 0.4rem;
+}
+
+.my-booking-card p {
+  margin: 0.2rem 0;
+  color: #cbd5e1;
+}

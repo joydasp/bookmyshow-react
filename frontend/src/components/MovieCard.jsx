@@ -1,44 +1,20 @@
 import { Link } from "react-router-dom";
+import "./MovieCard.css";
 
 const MovieCard = ({ movie }) => {
   return (
-    <Link
-      to={`/movie/${movie.imdbID}`}
-      state={{ movieTitle: movie.Title }}
-      style={{ textDecoration: "none" }}
-    >
-
-      <div style={styles.card}>
+    <Link to={`/movie/${movie.imdbID}`} state={{ movieTitle: movie.Title }} className="movie-card-link">
+      <article className="movie-card">
         <img
           src={movie.Poster !== "N/A" ? movie.Poster : "https://placehold.co/180x270"}
           alt={movie.Title}
-          style={styles.image}
+          className="movie-card-image"
         />
-        <h4 style={styles.title}>{movie.Title}</h4>
-        <p style={styles.year}>{movie.Year}</p>
-      </div>
+        <h4 className="movie-card-title">{movie.Title}</h4>
+        <p className="movie-card-year">{movie.Year}</p>
+      </article>
     </Link>
   );
-};
-
-const styles = {
-  card: {
-    width: "180px",
-    cursor: "pointer"
-  },
-  image: {
-    width: "100%",
-    borderRadius: "8px"
-  },
-  title: {
-    marginTop: "8px",
-    fontSize: "14px",
-    color: "#000"
-  },
-  year: {
-    fontSize: "12px",
-    color: "#666"
-  }
 };
 
 export default MovieCard;

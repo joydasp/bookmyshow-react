@@ -1,0 +1,57 @@
+.movie-details-page {
+  display: flex;
+  gap: 1.6rem;
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.58);
+}
+
+.movie-details-poster {
+  width: 260px;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 14px 30px rgba(2, 6, 23, 0.35);
+}
+
+.movie-details-info h1 {
+  margin: 0 0 0.65rem;
+  color: #f8fafc;
+}
+
+.movie-details-info p {
+  margin: 0.3rem 0;
+  color: #cbd5e1;
+}
+
+.movie-details-plot {
+  margin-top: 0.95rem;
+  line-height: 1.6;
+}
+
+.movie-details-book-btn {
+  margin-top: 1rem;
+  border: 0;
+  border-radius: 10px;
+  padding: 0.72rem 1.05rem;
+  background: linear-gradient(90deg, #f43f5e, #e11d48);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.movie-details-loading {
+  padding: 1rem;
+}
+
+@media (max-width: 780px) {
+  .movie-details-page {
+    flex-direction: column;
+    padding: 0.8rem;
+  }
+
+  .movie-details-poster {
+    width: 100%;
+    max-width: 320px;
+  }
+}

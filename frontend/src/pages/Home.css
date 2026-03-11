@@ -1,0 +1,119 @@
+.home-page {
+  display: grid;
+  gap: 1.7rem;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding: 0.4rem 0 0.8rem;
+}
+
+.home-layout {
+  display: grid;
+  grid-template-columns: clamp(110px, 8.5vw, 165px) minmax(0, 1fr) clamp(110px, 8.5vw, 165px);
+  gap: 0.6rem;
+  align-items: stretch;
+}
+
+.home-content {
+  display: grid;
+  gap: 1.7rem;
+  min-width: 0;
+}
+
+.home-brand-rail {
+  position: sticky;
+  top: 84px;
+  height: calc(100vh - 110px);
+  border: 1px solid rgba(90, 119, 160, 0.24);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 50% 14%, rgba(77, 193, 255, 0.18), transparent 42%),
+    radial-gradient(circle at 50% 90%, rgba(16, 185, 129, 0.14), transparent 40%),
+    linear-gradient(180deg, rgba(9, 20, 40, 0.86), rgba(8, 17, 34, 0.92));
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 26px rgba(148, 163, 184, 0.15),
+    0 12px 24px rgba(2, 6, 23, 0.34);
+}
+
+.home-brand-rail.left {
+  border-left: 0;
+  border-radius: 0 14px 14px 0;
+}
+
+.home-brand-rail.right {
+  border-right: 0;
+  border-radius: 14px 0 0 14px;
+}
+
+.home-brand-rail span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-weight: 800;
+  letter-spacing: 2px;
+  font-size: clamp(2.8rem, 5.6vw, 5.6rem);
+  line-height: 0.92;
+  opacity: 0.5;
+  background: linear-gradient(180deg, #e2e8f0 8%, #cbd5e1 52%, #e2e8f0 96%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 12px rgba(148, 163, 184, 0.28),
+    0 0 20px rgba(56, 189, 248, 0.2);
+}
+
+.home-brand-rail.right span {
+  transform: rotate(0deg);
+}
+
+.home-section h2 {
+  margin: 0 0 0.9rem;
+  font-size: 1.3rem;
+  color: #f8fafc;
+}
+
+.movies-grid {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 980px) {
+  .home-layout {
+    grid-template-columns: 76px minmax(0, 1fr) 76px;
+    gap: 0.45rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .home-page {
+    width: auto;
+    margin-left: 0;
+    padding: 0.4rem 0.2rem 0.8rem;
+  }
+
+  .home-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .home-brand-rail {
+    position: static;
+    height: 68px;
+  }
+
+  .home-brand-rail span,
+  .home-brand-rail.right span {
+    writing-mode: horizontal-tb;
+    transform: none;
+    font-size: clamp(2rem, 12vw, 2.8rem);
+    line-height: 1;
+    letter-spacing: 1px;
+  }
+
+  .movies-grid {
+    justify-content: center;
+  }
+}

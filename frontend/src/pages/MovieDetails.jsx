@@ -1,86 +1,56 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getMovieDetails } from "../services/omdb";
+import "./MovieDetails.css";
 
 const MovieDetails = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    getMovieDetails(id).then(data => setMovie(data));
+    getMovieDetails(id).then(setMovie);
   }, [id]);
 
-  if (!movie) return <h2 style={{ padding: "20px" }}>Loading...</h2>;
+  if (!movie) return <h2 className="movie-details-loading">Loading...</h2>;
 
   return (
-    <div style={styles.page}>
-      {/* LEFT: Poster */}
-      <img
-        src={movie.Poster}
-        alt={movie.Title}
-        style={styles.poster}
-      />
+    <div className="movie-details-page">
+      <img src={movie.Poster} alt={movie.Title} className="movie-details-poster" />
 
-      {/* RIGHT: Info */}
-      <div style={styles.info}>
+      <div className="movie-details-info">
         <h1>{movie.Title}</h1>
-
-        <p style={styles.meta}>
-          {movie.Year} • {movie.Runtime} • {movie.Genre}
+        <p>
+          <b>IMDb Rating:</b>  {movie.imdbRating}
+        </p>
+        <p>
+          <b>Genre:</b> {movie.Genre}
+        </p>
+        <p>
+          <b>Runtime:</b> {movie.Runtime}
+        </p>
+        <p>
+          <b>Director:</b> {movie.Director}
+        </p>
+        <p>
+          <b>Actors:</b> {movie.Actors}
         </p>
 
-        <p style={styles.rating}>
-          ⭐ IMDb Rating: {movie.imdbRating}
-        </p>
-
-        <p style={styles.plot}>{movie.Plot}</p>
+        <p className="movie-details-plot">{movie.Plot}</p>
 
         <button
-          onClick={() => navigate(`/movie/${movie.imdbID}/shows`)}
+          className="movie-details-book-btn"
+          onClick={() =>
+            navigate(`/movie/${id}/shows`, {
+              state: { movieTitle: movie.Title }
+            })
+          }
         >
           Book Tickets
         </button>
-
       </div>
     </div>
   );
-};
-
-const styles = {
-  page: {
-    display: "flex",
-    gap: "40px",
-    padding: "30px"
-  },
-  poster: {
-    width: "260px",
-    borderRadius: "8px"
-  },
-  info: {
-    maxWidth: "600px"
-  },
-  meta: {
-    color: "#555",
-    margin: "10px 0"
-  },
-  rating: {
-    margin: "10px 0",
-    fontWeight: "bold"
-  },
-  plot: {
-    margin: "20px 0",
-    lineHeight: "1.6"
-  },
-  bookBtn: {
-    backgroundColor: "#e31c25",
-    color: "#fff",
-    border: "none",
-    padding: "12px 24px",
-    fontSize: "16px",
-    borderRadius: "6px",
-    cursor: "pointer"
-  }
 };
 
 export default MovieDetails;

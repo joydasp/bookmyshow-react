@@ -1,89 +1,87 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { getShowtimesByMovie } from "../services/backend";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-
+import { getMovieDetails } from "../services/omdb";
+import "./Showtimes.css";
 
 const Showtimes = () => {
   const { imdbID } = useParams();
+  const location = useLocation();
   const [theatres, setTheatres] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [resolvedMovieTitle, setResolvedMovieTitle] = useState(
+    location.state?.movieTitle || ""
+  );
   const navigate = useNavigate();
-  const location = useLocation();
-  const movieTitle = location.state?.movieTitle;
 
   useEffect(() => {
-    getShowtimesByMovie(imdbID)
-      .then((data) => {
-        setTheatres(data.theatres);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, [imdbID]);
+    let isMounted = true;
 
-  if (loading) return <h2 style={{ padding: "20px" }}>Loading showtimes...</h2>;
+    const loadData = async () => {
+      try {
+        const data = await getShowtimesByMovie(imdbID);
+        if (isMounted) {
+          setTheatres(data.theatres || []);
+        }
+
+        if (!location.state?.movieTitle) {
+          const movie = await getMovieDetails(imdbID);
+          if (isMounted) {
+            setResolvedMovieTitle(movie?.Title || "");
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [imdbID, location.state?.movieTitle]);
+
+  if (loading) return <h2 className="showtimes-loading">Loading showtimes...</h2>;
 
   return (
-    <div style={{ padding: "30px" }}>
+    <div className="showtimes-page">
       <h1>Select Theatre & Show Time</h1>
 
       {theatres.map((theatre) => (
-        <div key={theatre.theatreId} style={styles.theatreCard}>
+        <article key={theatre.theatreId} className="showtimes-card">
           <h3>{theatre.theatreName}</h3>
-          <p style={{ color: "#666" }}>{theatre.location}</p>
+          <p className="showtimes-location">{theatre.location}</p>
 
-          <div style={styles.showsRow}>
+          <div className="showtimes-row">
             {theatre.shows.map((show) => (
               <button
                 key={show.time}
-                style={styles.timeBtn}
+                className="showtime-btn"
                 onClick={() =>
-                 navigate(`/movie/${imdbID}/seats`, {
-                  state: {
-                    imdbID,
-                    movieTitle,   // ✅ REAL title now
-                    theatre: theatre.theatreName,
-                    time: show.time,
-                    price: show.price,
-                  },
-                })
+                  navigate(`/movie/${imdbID}/seats`, {
+                    state: {
+                      imdbID,
+                      movieTitle: resolvedMovieTitle,
+                      theatre: theatre.theatreName,
+                      time: show.time,
+                      price: show.price
+                    }
+                  })
                 }
               >
-                {show.time} — ₹{show.price}
+                {show.time} - {show.price}
               </button>
             ))}
           </div>
-        </div>
+        </article>
       ))}
     </div>
   );
-};
-
-const styles = {
-  theatreCard: {
-    marginTop: "25px",
-    padding: "15px",
-    border: "1px solid #ddd",
-    borderRadius: "6px",
-  },
-  showsRow: {
-    display: "flex",
-    gap: "12px",
-    marginTop: "10px",
-    flexWrap: "wrap",
-  },
-  timeBtn: {
-    padding: "8px 14px",
-    border: "1px solid #4caf50",
-    background: "#fff",
-    color: "#4caf50",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
 };
 
 export default Showtimes;

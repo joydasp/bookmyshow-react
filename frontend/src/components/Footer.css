@@ -1,0 +1,51 @@
+.app-footer {
+  position: relative;
+  overflow: hidden;
+  margin-top: 1.2rem;
+  padding: 2rem 1rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.2);
+  background: linear-gradient(120deg, #0b0f19 0%, #1e293b 45%, #0b1324 100%);
+  text-align: center;
+}
+
+.app-footer-glow {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(56px);
+}
+
+.app-footer-glow-left {
+  width: 260px;
+  height: 260px;
+  background: rgba(244, 63, 94, 0.26);
+  top: -140px;
+  left: -80px;
+}
+
+.app-footer-glow-right {
+  width: 300px;
+  height: 300px;
+  background: rgba(34, 211, 238, 0.2);
+  bottom: -160px;
+  right: -100px;
+}
+
+.app-footer-content {
+  position: relative;
+  z-index: 1;
+}
+
+.app-footer-content h3 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.app-footer-content p {
+  margin: 0.45rem 0 0;
+  color: #cbd5e1;
+}
+
+.app-footer-copy {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}

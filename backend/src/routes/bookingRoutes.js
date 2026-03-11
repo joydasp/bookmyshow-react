@@ -9,7 +9,16 @@ const router = express.Router();
 // ===============================
 router.post("/", protect, async (req, res) => {
   try {
-    const { imdbID, theatre, showTime, seats, totalAmount, movieTitle } = req.body;
+    const {
+      imdbID,
+      theatre,
+      showTime,
+      seats,
+      totalAmount,
+      movieTitle,
+      snacks = [],
+      snackTotal = 0,
+    } = req.body;
 
     const userId = req.user;
 
@@ -41,6 +50,8 @@ router.post("/", protect, async (req, res) => {
       showTime,
       seats,
       totalAmount,
+      snacks,
+      snackTotal,
     });
 
     res.status(201).json(booking);
