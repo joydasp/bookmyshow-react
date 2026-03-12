@@ -26,6 +26,7 @@ function App() {
 
     <Route path="/login" element={<Login />} />
     <Route path="/signup" element={<Signup />} />
+    <Route path="/search/:query" element={<SearchResults />} />
 
     <Route path="/movie/:id" element={<MovieDetails />} />
     <Route path="/movie/:imdbID/shows" element={<Showtimes />} />

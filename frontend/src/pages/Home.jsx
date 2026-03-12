@@ -3,6 +3,7 @@ import BannerCarousel from "../components/BannerCarousel";
 import MovieCard from "../components/MovieCard";
 import { searchMovies } from "../services/omdb";
 import "./Home.css";
+import Footer from "../components/Footer";
 
 const Home = () => {
   const [recommended, setRecommended] = useState([]);
@@ -65,7 +66,10 @@ const Home = () => {
           <span>JustTicketIT</span>
         </aside>
       </div>
+      <Footer>
+    </Footer>
     </div>
+    
   );
 };
 
