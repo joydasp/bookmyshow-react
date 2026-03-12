@@ -66,8 +66,7 @@ const Home = () => {
           <span>JustTicketIT</span>
         </aside>
       </div>
-      <Footer>
-    </Footer>
+      
     </div>
     
   );
